@@ -1,0 +1,28 @@
+name: Auto release tag
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  auto-release-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Bump version and push tag
+        uses: mathieudutour/github-tag-action@v6.1
+        id: tag_version
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: create release
+        uses: actions/create-release@v1
+        id: create_release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.tag_version.outputs.new_tag }}
+          release_name: Release ${{ steps.tag_version.outputs.new_tag }}
+          draft: false
+          prerelease: false
+          body: ${{ steps.tag_version.outputs.changelog }}
