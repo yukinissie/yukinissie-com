@@ -1,0 +1,32 @@
+name: CI for infra
+
+on:
+  push:
+    paths:
+      - "cdk/**"
+  workflow_dispatch:
+
+jobs:
+  ci-for-infra:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: cdk
+    steps:
+      - uses: actions/checkout@v4
+      - name: use node from .node-version
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".node-version"
+      - name: install dependencies
+        run: npm ci
+      - name: assume role
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.CI_ROLE_ARN }}
+          role-session-name: ci-for-infra
+          aws-region: us-east-1
+      - name: test
+        env:
+          CERT_ARN: ${{ secrets.CERT_ARN }}
+        run: npm run test
