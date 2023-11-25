@@ -6,6 +6,10 @@ on:
       - "cdk/**"
   workflow_dispatch:
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   ci-for-infra:
     runs-on: ubuntu-latest
