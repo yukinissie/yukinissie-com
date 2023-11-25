@@ -6,6 +6,10 @@ on:
       - "cdk/**"
   workflow_dispatch:
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   ci-for-infra:
     runs-on: ubuntu-latest
@@ -17,7 +21,7 @@ jobs:
       - name: use node from .node-version
         uses: actions/setup-node@v4
         with:
-          node-version-file: ".node-version"
+          node-version-file: "cdk/.node-version"
       - name: install dependencies
         run: npm ci
       - name: assume role
