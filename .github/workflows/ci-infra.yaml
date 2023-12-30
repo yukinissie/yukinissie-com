@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - "cdk/**"
+      - "src/**"
   workflow_dispatch:
 
 permissions:
