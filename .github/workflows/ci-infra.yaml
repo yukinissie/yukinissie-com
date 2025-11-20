@@ -18,7 +18,7 @@ jobs:
       run:
         working-directory: cdk
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: use node from .node-version
         uses: actions/setup-node@v4
         with:
